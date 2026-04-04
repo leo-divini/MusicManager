@@ -19,7 +19,7 @@ def _is_foobar_running() -> bool:
     try:
         import psutil
         for proc in psutil.process_iter(["name"]):
-            if (proc.info["name"] or "").lower() == "foobar2000.exe":
+            if proc.info.get("name", "").lower() == "foobar2000.exe":
                 return True
     except Exception as exc:
         logger.debug("psutil process check failed: %s", exc)
