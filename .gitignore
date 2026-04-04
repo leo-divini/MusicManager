@@ -1,10 +1,10 @@
 config.yaml
-data/music.db
-data/music.log
-data/sync/
+Backend/data/music.db
+Backend/data/music.log
+Backend/data/sync/
 __pycache__/
 *.pyc
 .env
 _Temp/
-bin/
-obj/
+GUI/bin/
+GUI/obj/

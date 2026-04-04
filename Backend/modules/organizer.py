@@ -124,6 +124,15 @@ def _find_duplicate(md5: str) -> Optional[Path]:
     return None
 
 
+def _ensure_artist_subfolders(artist_folder: Path) -> None:
+    """Create Immagini/ and Strumentali/ subfolders the first time an artist folder is made."""
+    for subfolder in ("Immagini", "Strumentali"):
+        sub = artist_folder / subfolder
+        if not sub.exists():
+            sub.mkdir(parents=True, exist_ok=True)
+            logger.debug("Created artist subfolder: %s", sub)
+
+
 # ---------------------------------------------------------------------------
 # Main organize function
 # ---------------------------------------------------------------------------
@@ -163,6 +172,8 @@ def organize_file(src: Path) -> Optional[Path]:
     )
     # Simpler: just build from artist / album directly
     dest_folder = config.music_root / artist / album
+    artist_folder = config.music_root / artist
+    _ensure_artist_subfolders(artist_folder)
     dest_folder.mkdir(parents=True, exist_ok=True)
 
     # File name

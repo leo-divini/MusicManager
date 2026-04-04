@@ -1,0 +1,72 @@
+# MusicManager configuration template
+# Copy this file to config.yaml and fill in your values.
+# config.yaml is excluded from version control (.gitignore).
+
+paths:
+  # Absolute path to your main music library (where Artisti/ folders are created)
+  music_root: "D:/Music/Artisti"
+
+  # Absolute path to your playlists folder (where Playlist/ folders are created)
+  playlists_root: "D:/Music/Playlist"
+
+  # Temporary download folder (relative to project root, or absolute)
+  # Files are downloaded here first, then moved to music_root after tagging
+  temp: "_Temp"
+
+  # Inbox folder monitored by inbox_watcher.py for drag-and-drop imports
+  # Drop audio files into subfolders of this directory; subfolder name = playlist name
+  inbox: "_Inbox"
+
+  # Path to queue.txt – the plain-text download queue file
+  queue_file: "queue.txt"
+
+spotify:
+  # Spotify API credentials for downloading via spotDL and searching for instrumentals
+  # Get them at: https://developer.spotify.com/dashboard
+  # Create an app, then copy the Client ID and Client Secret shown on the app page
+  client_id: ""
+  client_secret: ""
+
+lastfm:
+  # Last.fm API credentials for genre lookup and artist photos
+  # Get them at: https://www.last.fm/api/account/create
+  api_key: ""
+  api_secret: ""
+
+genius:
+  # Genius API token for fetching song lyrics
+  # Get it at: https://genius.com/api-clients → click "New API Client" → copy "Client Access Token"
+  token: ""
+
+musicbrainz:
+  # User-agent string sent to MusicBrainz API (required by their ToS)
+  # Format: "AppName/Version (contact@email.com)"
+  # Replace with your app name and a valid contact e-mail address
+  user_agent: "MusicManager/1.0 (your@email.com)"
+
+naming:
+  # Folder structure template inside music_root
+  # Available variables: {artist}, {albumartist}, {album}, {year}, {genre}
+  folder_template: "{artist}/{album} ({year})"
+
+  # File naming template (without extension)
+  # Available variables: {track}, {disc}, {title}, {artist}, {albumartist}, {album}, {year}
+  file_template: "{track:02d}. {title}"
+
+download:
+  # Audio format for downloaded tracks: flac | mp3 | ogg | opus | m4a
+  format: "flac"
+
+  # Maximum number of simultaneous downloads (1–4 recommended)
+  max_parallel: 2
+
+  # Number of retry attempts when a download fails (spotDL errors, network issues, etc.)
+  retry_max: 3
+
+  # Seconds to wait between retry attempts
+  retry_delay: 300
+
+foobar:
+  # Full path to the foobar2000 executable
+  # Used by foobar.py to refresh the media library after new files are organised
+  exe_path: "C:/Program Files/foobar2000/foobar2000.exe"

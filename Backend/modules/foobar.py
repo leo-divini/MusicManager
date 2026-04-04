@@ -2,6 +2,7 @@
 foobar.py – Refreshes the foobar2000 media library after downloads.
 
 Uses the foobar2000 CLI interface (/add and /play flags).
+Checks whether foobar2000 is already running via psutil before launching.
 """
 
 import logging
@@ -11,6 +12,18 @@ from pathlib import Path
 from modules.config import config
 
 logger = logging.getLogger(__name__)
+
+
+def _is_foobar_running() -> bool:
+    """Return True if a foobar2000 process is currently running."""
+    try:
+        import psutil
+        for proc in psutil.process_iter(["name"]):
+            if (proc.info["name"] or "").lower() == "foobar2000.exe":
+                return True
+    except Exception as exc:
+        logger.debug("psutil process check failed: %s", exc)
+    return False
 
 
 def refresh_library(path: str = None) -> dict:
@@ -23,6 +36,11 @@ def refresh_library(path: str = None) -> dict:
     exe = config.foobar_exe
     if not Path(exe).exists():
         msg = f"foobar2000 not found at {exe}"
+        logger.warning(msg)
+        return {"success": False, "message": msg}
+
+    if not _is_foobar_running():
+        msg = "foobar2000 is not running – launch it first"
         logger.warning(msg)
         return {"success": False, "message": msg}
 
