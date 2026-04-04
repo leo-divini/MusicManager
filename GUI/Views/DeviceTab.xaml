@@ -1,0 +1,177 @@
+<UserControl x:Class="MusicManager.Views.DeviceTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:MusicManager.ViewModels"
+             Background="{StaticResource BackgroundBrush}"
+             Foreground="{StaticResource ForegroundBrush}">
+
+    <UserControl.DataContext>
+        <vm:DeviceViewModel />
+    </UserControl.DataContext>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Device Status Row -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                    Background="{StaticResource SurfaceBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Padding="12,8"
+                    Margin="0,0,8,0">
+                <TextBlock Text="{Binding DeviceStatus}"
+                           FontSize="14"
+                           VerticalAlignment="Center" />
+            </Border>
+
+            <Button Grid.Column="1"
+                    Content="🔄  Aggiorna"
+                    Command="{Binding RefreshCommand}"
+                    Height="38"
+                    Style="{StaticResource GhostButtonStyle}" />
+        </Grid>
+
+        <!-- Playlist Checklist -->
+        <Border Grid.Row="1"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="4">
+            <ListView ItemsSource="{Binding Playlists}"
+                      BorderThickness="0"
+                      Background="{StaticResource SurfaceBrush}"
+                      VirtualizingPanel.IsVirtualizing="True"
+                      VirtualizingPanel.VirtualizationMode="Recycling">
+                <ListView.View>
+                    <GridView>
+
+                        <!-- Checkbox -->
+                        <GridViewColumn Header="" Width="36">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <!-- Playlist Name -->
+                        <GridViewColumn Header="Playlist" Width="260">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"
+                                               FontWeight="SemiBold"
+                                               TextTrimming="CharacterEllipsis" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <!-- Track Count -->
+                        <GridViewColumn Header="Tracce" Width="80">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding TrackCount}"
+                                               HorizontalAlignment="Center"
+                                               Foreground="{StaticResource ForegroundMutedBrush}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <!-- Estimated MB -->
+                        <GridViewColumn Header="Dim. stimata" Width="110">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock HorizontalAlignment="Right"
+                                               Foreground="{StaticResource ForegroundMutedBrush}">
+                                        <Run Text="{Binding EstimatedSizeMb, StringFormat={}{0:F1}}" />
+                                        <Run Text=" MB" />
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <!-- Per-playlist progress -->
+                        <GridViewColumn Header="Progresso" Width="160">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical" Margin="0,2">
+                                        <ProgressBar Value="{Binding ExportProgress}"
+                                                     Maximum="100"
+                                                     Height="8"
+                                                     Margin="0,0,0,2" />
+                                        <TextBlock FontSize="11"
+                                                   Foreground="{StaticResource ForegroundMutedBrush}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ExportProgress}" Value="100">
+                                                            <Setter Property="Text" Value="✅ Completata" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Border>
+
+        <!-- Total Selected Size -->
+        <Border Grid.Row="2"
+                Background="{StaticResource SurfaceBrush}"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="4"
+                Padding="12,8"
+                Margin="0,12,0,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Foreground="{StaticResource ForegroundMutedBrush}"
+                           FontSize="12">
+                    <Run Text="Playlist selezionate: " />
+                    <Run Text="{Binding SelectedPlaylistCount, Mode=OneWay}"
+                         Foreground="{StaticResource ForegroundBrush}" />
+                </TextBlock>
+                <TextBlock Grid.Column="1"
+                           VerticalAlignment="Center"
+                           FontSize="13">
+                    <Run Text="Totale: " Foreground="{StaticResource ForegroundMutedBrush}" />
+                    <Run Text="{Binding TotalSelectedSize, Mode=OneWay}"
+                         FontWeight="SemiBold"
+                         Foreground="{StaticResource AccentBrush}" />
+                </TextBlock>
+            </Grid>
+        </Border>
+
+        <!-- Export Button -->
+        <Button Grid.Row="3"
+                Content="📤  Esporta sul Dispositivo"
+                Command="{Binding ExportCommand}"
+                Height="42"
+                FontSize="14"
+                IsEnabled="{Binding CanExport}" />
+    </Grid>
+</UserControl>

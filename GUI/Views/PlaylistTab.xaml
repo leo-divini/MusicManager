@@ -1,0 +1,230 @@
+<UserControl x:Class="MusicManager.Views.PlaylistTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:MusicManager.ViewModels"
+             Background="{StaticResource BackgroundBrush}"
+             Foreground="{StaticResource ForegroundBrush}"
+             AllowDrop="True"
+             Drop="UserControl_Drop"
+             DragEnter="UserControl_DragEnter"
+             DragOver="UserControl_DragOver">
+
+    <UserControl.DataContext>
+        <vm:PlaylistViewModel />
+    </UserControl.DataContext>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Playlist Selector Row -->
+        <Grid Grid.Row="0" Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <ComboBox Grid.Column="0"
+                      ItemsSource="{Binding Playlists}"
+                      SelectedItem="{Binding SelectedPlaylist}"
+                      DisplayMemberPath="Name"
+                      Height="34"
+                      Margin="0,0,8,0" />
+
+            <Button Grid.Column="1"
+                    Content="➕  Nuova Playlist"
+                    Command="{Binding NewPlaylistCommand}"
+                    Height="34"
+                    Margin="0,0,8,0" />
+
+            <Button Grid.Column="2"
+                    Content="🗑  Elimina"
+                    Command="{Binding DeletePlaylistCommand}"
+                    Height="34"
+                    Style="{StaticResource DangerButtonStyle}"
+                    IsEnabled="{Binding HasSelectedPlaylist}" />
+        </Grid>
+
+        <!-- File Action Buttons Row -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,12">
+            <Button Content="📄  Aggiungi File"
+                    Command="{Binding AddFilesCommand}"
+                    Margin="0,0,8,0"
+                    IsEnabled="{Binding HasSelectedPlaylist}" />
+            <Button Content="📁  Aggiungi Cartella"
+                    Command="{Binding AddFolderCommand}"
+                    Style="{StaticResource GhostButtonStyle}"
+                    IsEnabled="{Binding HasSelectedPlaylist}" />
+        </StackPanel>
+
+        <!-- Track List and Drop Zone -->
+        <Grid Grid.Row="2">
+            <!-- Drop zone hint (shown when no tracks) -->
+            <Border BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="2"
+                    CornerRadius="6"
+                    Background="{StaticResource SurfaceBrush}">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsDragOver}" Value="True">
+                                <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
+                                <Setter Property="Background" Value="#1A0078D4" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+
+                <Grid>
+                    <!-- Empty state / drop hint -->
+                    <StackPanel VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasTracks}" Value="False">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock Text="🎵"
+                                   FontSize="48"
+                                   HorizontalAlignment="Center"
+                                   Opacity="0.3" />
+                        <TextBlock Text="Trascina file o cartelle qui"
+                                   FontSize="16"
+                                   Foreground="{StaticResource ForegroundMutedBrush}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,8,0,4" />
+                        <TextBlock Text="oppure usa i pulsanti sopra"
+                                   FontSize="12"
+                                   Foreground="{StaticResource ForegroundMutedBrush}"
+                                   HorizontalAlignment="Center"
+                                   Opacity="0.6" />
+                    </StackPanel>
+
+                    <!-- Track ListView with reorder controls -->
+                    <Grid>
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasTracks}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ListView Grid.Column="0"
+                                  ItemsSource="{Binding Tracks}"
+                                  SelectedItem="{Binding SelectedTrack}"
+                                  BorderThickness="0"
+                                  Background="Transparent"
+                                  VirtualizingPanel.IsVirtualizing="True"
+                                  VirtualizingPanel.VirtualizationMode="Recycling">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="#" Width="40">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Position}"
+                                                           Foreground="{StaticResource ForegroundMutedBrush}"
+                                                           FontSize="12"
+                                                           HorizontalAlignment="Center" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Header="Artista" Width="180">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Artist}"
+                                                           TextTrimming="CharacterEllipsis" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Header="Titolo" Width="260">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Title}"
+                                                           TextTrimming="CharacterEllipsis" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Header="Origine" Width="120">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Origin}"
+                                                           FontSize="11"
+                                                           Foreground="{StaticResource ForegroundMutedBrush}"
+                                                           TextTrimming="CharacterEllipsis" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Header="" Width="50">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="✕"
+                                                        Command="{Binding DataContext.RemoveTrackCommand,
+                                                                  RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                        CommandParameter="{Binding}"
+                                                        FontSize="12"
+                                                        Width="28" Height="24"
+                                                        Padding="0"
+                                                        Style="{StaticResource DangerButtonStyle}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                        <!-- Reorder Buttons -->
+                        <StackPanel Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Margin="8,0,0,0">
+                            <Button Content="▲"
+                                    Command="{Binding MoveUpCommand}"
+                                    Width="32" Height="32"
+                                    Margin="0,0,0,6"
+                                    Padding="0"
+                                    Style="{StaticResource GhostButtonStyle}"
+                                    ToolTip="Sposta su" />
+                            <Button Content="▼"
+                                    Command="{Binding MoveDownCommand}"
+                                    Width="32" Height="32"
+                                    Padding="0"
+                                    Style="{StaticResource GhostButtonStyle}"
+                                    ToolTip="Sposta giù" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Footer: track count -->
+        <TextBlock Grid.Row="3"
+                   Margin="0,8,0,0"
+                   Foreground="{StaticResource ForegroundMutedBrush}"
+                   FontSize="12">
+            <Run Text="{Binding TrackCount, Mode=OneWay}" />
+            <Run Text=" tracce nella playlist" />
+        </TextBlock>
+    </Grid>
+</UserControl>
