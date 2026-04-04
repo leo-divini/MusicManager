@@ -144,7 +144,12 @@ def _parse_yt_duration(s: str) -> Optional[float]:
 def _download_instrumental(url: str, dest_folder: Path) -> Optional[Path]:
     dest_folder.mkdir(parents=True, exist_ok=True)
 
-    if "spotify.com" in url or "spotify:" in url:
+    from urllib.parse import urlparse
+    parsed = urlparse(url)
+    is_spotify = (parsed.scheme == "spotify") or (
+        parsed.netloc in {"open.spotify.com", "api.spotify.com"}
+    )
+    if is_spotify:
         cmd = [
             sys.executable, "-m", "spotdl",
             "download", url,

@@ -208,7 +208,7 @@ def organize_file(src: Path) -> Optional[Path]:
         )
         if not created:
             track.hash_md5 = md5
-            track.date_modified = __import__("datetime").datetime.utcnow()
+            track.date_modified = __import__("datetime").datetime.now(__import__("datetime").timezone.utc)
             track.save()
 
     return dest

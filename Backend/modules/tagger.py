@@ -228,7 +228,6 @@ def _write_tags_mp3(path: Path, tags: dict, lyrics: Optional[str]) -> None:
         audio = ID3(path)
     except Exception:
         audio = ID3()
-    _set_id3 = lambda frame, val: audio.add(frame) if val else None
     if tags.get("title"):
         audio["TIT2"] = TIT2(encoding=3, text=tags["title"])
     if tags.get("artist"):

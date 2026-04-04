@@ -81,7 +81,7 @@ def _save_spotdl_file(playlist_name: str, source: str, tracks: list[dict]) -> Pa
     data = {
         "query": source,
         "tracks": tracks,
-        "saved_at": __import__("datetime").datetime.utcnow().isoformat(),
+        "saved_at": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
     }
     path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
     return path

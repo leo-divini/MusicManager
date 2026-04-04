@@ -54,7 +54,7 @@ class Artist(BaseModel):
     musicbrainz_id = CharField(null=True)
     lastfm_url = CharField(null=True)
     photo_path = CharField(null=True)
-    date_added = DateTimeField(default=datetime.datetime.utcnow)
+    date_added = DateTimeField(default=lambda: datetime.datetime.now(datetime.timezone.utc))
 
 
 # ---------------------------------------------------------------------------
@@ -72,7 +72,7 @@ class Album(BaseModel):
     genre = CharField(null=True)
     musicbrainz_id = CharField(null=True)
     cover_path = CharField(null=True)
-    date_added = DateTimeField(default=datetime.datetime.utcnow)
+    date_added = DateTimeField(default=lambda: datetime.datetime.now(datetime.timezone.utc))
 
 
 # ---------------------------------------------------------------------------
@@ -101,8 +101,8 @@ class Track(BaseModel):
     replaygain = FloatField(null=True)      # dB
     spotify_id = CharField(null=True)
     musicbrainz_id = CharField(null=True)
-    date_added = DateTimeField(default=datetime.datetime.utcnow)
-    date_modified = DateTimeField(default=datetime.datetime.utcnow)
+    date_added = DateTimeField(default=lambda: datetime.datetime.now(datetime.timezone.utc))
+    date_modified = DateTimeField(default=lambda: datetime.datetime.now(datetime.timezone.utc))
 
 
 # ---------------------------------------------------------------------------
@@ -118,8 +118,8 @@ class Playlist(BaseModel):
     source = CharField(null=True)           # e.g. "spotify:playlist:37i9dQ..."
     folder_path = CharField(null=True)
     cover_path = CharField(null=True)
-    date_created = DateTimeField(default=datetime.datetime.utcnow)
-    date_modified = DateTimeField(default=datetime.datetime.utcnow)
+    date_created = DateTimeField(default=lambda: datetime.datetime.now(datetime.timezone.utc))
+    date_modified = DateTimeField(default=lambda: datetime.datetime.now(datetime.timezone.utc))
 
 
 class PlaylistTrack(BaseModel):
@@ -137,7 +137,7 @@ class PlaylistTrack(BaseModel):
     artist = CharField(null=True)
     origin_path = CharField(null=True)
     playlist_path = CharField(null=True)
-    date_added = DateTimeField(default=datetime.datetime.utcnow)
+    date_added = DateTimeField(default=lambda: datetime.datetime.now(datetime.timezone.utc))
 
 
 # ---------------------------------------------------------------------------
@@ -166,8 +166,8 @@ class QueueItem(BaseModel):
     )
     progress = FloatField(default=0.0)
     error_message = TextField(null=True)
-    date_added = DateTimeField(default=datetime.datetime.utcnow)
-    date_modified = DateTimeField(default=datetime.datetime.utcnow)
+    date_added = DateTimeField(default=lambda: datetime.datetime.now(datetime.timezone.utc))
+    date_modified = DateTimeField(default=lambda: datetime.datetime.now(datetime.timezone.utc))
     retries = IntegerField(default=0)
 
 
@@ -183,7 +183,7 @@ class SyncLog(BaseModel):
     playlist_name = CharField(null=True, index=True)
     action = CharField()    # added, removed, reordered, error
     detail = TextField(null=True)
-    timestamp = DateTimeField(default=datetime.datetime.utcnow)
+    timestamp = DateTimeField(default=lambda: datetime.datetime.now(datetime.timezone.utc))
 
 
 # ---------------------------------------------------------------------------
@@ -198,7 +198,7 @@ class DeviceExport(BaseModel):
     playlist_name = CharField(index=True)
     track_path = CharField()
     mp3_hash = CharField(null=True)
-    exported_at = DateTimeField(default=datetime.datetime.utcnow)
+    exported_at = DateTimeField(default=lambda: datetime.datetime.now(datetime.timezone.utc))
 
 
 # ---------------------------------------------------------------------------

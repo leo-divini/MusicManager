@@ -285,7 +285,7 @@ def _sync_db_playlist(playlist_name: str, manifest: dict, folder: Path) -> None:
         )
         pl.folder_path = str(folder)
         pl.source = manifest.get("source")
-        pl.date_modified = datetime.datetime.utcnow()
+        pl.date_modified = datetime.datetime.now(datetime.timezone.utc)
         pl.save()
 
         # Clear and re-insert

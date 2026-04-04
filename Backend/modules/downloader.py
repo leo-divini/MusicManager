@@ -92,7 +92,7 @@ def _update_queue(item_id: int, status: str, progress: float = 0.0, error: str =
             status=status,
             progress=progress,
             error_message=error,
-            date_modified=datetime.datetime.utcnow(),
+            date_modified=datetime.datetime.now(datetime.timezone.utc),
         ).where(QueueItem.id == item_id).execute()
 
 

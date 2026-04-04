@@ -51,7 +51,7 @@ def _download_image(url: str) -> Optional[bytes]:
         resp.raise_for_status()
         return resp.content
     except Exception as exc:
-        logger.debug("Image download failed (%s): %s", url, exc)
+        logger.debug("Image download failed: %s", exc)
         return None
 
 
