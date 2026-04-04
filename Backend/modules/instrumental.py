@@ -147,6 +147,7 @@ def _download_instrumental(url: str, dest_folder: Path) -> Optional[Path]:
     from urllib.parse import urlparse
     parsed = urlparse(url)
     is_spotify = (parsed.scheme == "spotify") or (
+        parsed.scheme in {"http", "https"} and
         parsed.netloc in {"open.spotify.com", "api.spotify.com"}
     )
     if is_spotify:
