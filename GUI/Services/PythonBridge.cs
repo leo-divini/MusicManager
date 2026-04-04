@@ -29,7 +29,7 @@ namespace MusicManager.Services
         // ── Public API ────────────────────────────────────────────────────────────
 
         /// <summary>
-        /// Runs "python main.py &lt;args&gt;", waits for the process to finish, and returns
+        /// Runs "python main.py" with the given args, waits for the process to finish, and returns
         /// the full stdout as a string.
         /// </summary>
         public async Task<string> RunCommandAsync(string args)
@@ -44,7 +44,7 @@ namespace MusicManager.Services
         }
 
         /// <summary>
-        /// Runs "python main.py &lt;args&gt;" and invokes <paramref name="onOutput"/> for every
+        /// Runs "python main.py" with the given args and invokes <paramref name="onOutput"/> for every
         /// line printed to stdout. Useful for streaming progress updates.
         /// </summary>
         public async Task RunCommandWithProgressAsync(string args, Action<string> onOutput)

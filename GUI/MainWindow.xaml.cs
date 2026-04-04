@@ -17,7 +17,12 @@ namespace MusicManager
             _deviceMonitor.DeviceDisconnected += OnDeviceDisconnected;
             _deviceMonitor.Start();
 
-            // Pass the monitor to the DeviceTab's ViewModel
+            Loaded += OnWindowLoaded;
+        }
+
+        private void OnWindowLoaded(object sender, RoutedEventArgs e)
+        {
+            // DataContext is guaranteed to be fully initialized after XAML load
             if (DeviceTabView.DataContext is DeviceViewModel vm)
                 vm.SetDeviceMonitor(_deviceMonitor);
         }
