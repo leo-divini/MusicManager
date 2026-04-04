@@ -1,0 +1,12 @@
+spotdl
+mutagen
+peewee
+musicbrainzngs
+pylast
+lyricsgenius
+Pillow
+watchdog
+rich
+pyyaml
+requests
+spotipy
