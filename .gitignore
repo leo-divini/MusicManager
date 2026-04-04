@@ -1,0 +1,10 @@
+config.yaml
+data/music.db
+data/music.log
+data/sync/
+__pycache__/
+*.pyc
+.env
+_Temp/
+bin/
+obj/
