@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 :: ============================================================
-::  MusicManager – setup.bat
+::  MusicManager - setup.bat
 ::
 ::  First run  : checks Python 3.11, creates .venv, installs
 ::               dependencies, and guides you through config.
@@ -18,11 +18,11 @@ set "WIZARD=%ROOT%setup_config.py"
 
 echo.
 echo  +==============================================+
-echo  ^|        MusicManager  –  Setup / Config      ^|
+echo  ^|        MusicManager  -  Setup / Config      ^|
 echo  +==============================================+
 echo.
 
-:: ─── Locate Python 3.11 ──────────────────────────────────────
+:: --- Locate Python 3.11 --------------------------------------------
 set "PYTHON="
 
 py -3.11 --version >nul 2>&1
@@ -56,7 +56,7 @@ exit /b 1
 :python_found
 for /f "tokens=*" %%V in ('!PYTHON! --version 2^>^&1') do echo  [OK] Found %%V
 
-:: ─── First run: venv does not exist yet ──────────────────────
+:: --- First run: venv does not exist yet ----------------------------
 if not exist "%VENV%\Scripts\activate.bat" (
     echo.
     echo  [1/3] Creating virtual environment in .venv ...
@@ -90,7 +90,7 @@ if not exist "%VENV%\Scripts\activate.bat" (
     exit /b 0
 )
 
-:: ─── Subsequent runs: show menu ──────────────────────────────
+:: --- Subsequent runs: show menu ------------------------------------
 :menu
 echo  Virtual environment : %VENV%
 echo.
@@ -107,7 +107,7 @@ if "!CHOICE!"=="1" goto :edit_config
 if "!CHOICE!"=="2" goto :update_deps
 if "!CHOICE!"=="3" goto :end
 
-echo  Invalid choice – please enter 1, 2 or 3.
+echo  Invalid choice - please enter 1, 2 or 3.
 echo.
 goto :menu
 

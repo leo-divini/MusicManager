@@ -1,5 +1,5 @@
 """
-setup_config.py – Interactive configuration wizard for MusicManager.
+setup_config.py - Interactive configuration wizard for MusicManager.
 
 Reads the existing config.yaml (if present), prompts for every setting
 (showing the current value as the default), and writes the result back.
@@ -20,7 +20,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parent
 CONFIG_PATH = ROOT / "config.yaml"
 
-# ── Default values (mirrors config.py DEFAULT_CONFIG) ────────────────────────
+# -- Default values (mirrors config.py DEFAULT_CONFIG) --------------------------------
 
 DEFAULTS: dict = {
     "paths": {
@@ -75,14 +75,14 @@ PROMPTS: list[tuple] = [
     ("naming",       "folder_template",  "Folder naming template",       "{artist}/{album} ({year})"),
     ("naming",       "file_template",    "File naming template",         "{track:02d}. {title}"),
     ("download",     "format",           "Audio format",                 "flac | mp3 | ogg | opus | m4a"),
-    ("download",     "max_parallel",     "Max parallel downloads",       "1–4 recommended"),
+    ("download",     "max_parallel",     "Max parallel downloads",       "1-4 recommended"),
     ("download",     "retry_max",        "Retry attempts on failure",    ""),
     ("download",     "retry_delay",      "Retry delay in seconds",       ""),
     ("foobar",       "exe_path",         "foobar2000 executable path",   "leave blank if not used"),
 ]
 
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
+# -- Helpers ------------------------------------------------------------------
 
 def _deep_merge(base: dict, override: dict) -> dict:
     """Recursively merge *override* into *base*, returning a new dict."""
@@ -115,7 +115,7 @@ def _ask(label: str, hint: str, current) -> str:
     return raw if raw else str(current)
 
 
-# ── Main wizard ───────────────────────────────────────────────────────────────
+# -- Main wizard --------------------------------------------------------------
 
 def main() -> None:
     existing = _load_existing()
@@ -123,7 +123,7 @@ def main() -> None:
 
     action = "Editing" if CONFIG_PATH.exists() else "Creating"
     print("=" * 62)
-    print(f"  MusicManager – Configuration Wizard  ({action} config.yaml)")
+    print(f"  MusicManager - Configuration Wizard  ({action} config.yaml)")
     print("  Press ENTER to keep the value shown in [brackets].")
     print("=" * 62)
 
@@ -131,7 +131,7 @@ def main() -> None:
     for section, key, label, hint in PROMPTS:
         if section != current_section:
             current_section = section
-            print(f"\n  ── {section.upper()} " + "─" * (46 - len(section)))
+            print(f"\n  -- {section.upper()} " + "-" * (46 - len(section)))
 
         current_val = cfg.get(section, {}).get(key, DEFAULTS.get(section, {}).get(key, ""))
         new_val: str | int = _ask(label, hint, current_val)
@@ -142,7 +142,7 @@ def main() -> None:
             try:
                 new_val = int(new_val)
             except ValueError:
-                print(f"  [WARN] Expected a number – keeping previous value ({current_val})")
+                print(f"  [WARN] Expected a number - keeping previous value ({current_val})")
                 new_val = current_val
 
         cfg[section][key] = new_val
