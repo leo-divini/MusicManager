@@ -1,4 +1,5 @@
 config.yaml
+.venv/
 Backend/data/music.db
 Backend/data/music.log
 Backend/data/sync/
